@@ -393,7 +393,7 @@
         <div id="productContainer" class="product-grid"></div>
     </div>
 
-    <!-- Modal de Personalização do Produto -->
+    <!-- Modal de Personalização -->
     <div class="modal-overlay" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -421,7 +421,7 @@
         </div>
     </div>
 
-    <!-- Modal de Finalização do Pedido (Checkout) -->
+    <!-- Modal de Checkout -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -429,9 +429,7 @@
                 <button class="modal-close" onclick="closeModal('checkoutModal')">✕</button>
             </div>
 
-            <div id="cartSummaryList" style="margin-bottom: 15px; max-height: 150px; overflow-y: auto;">
-                <!-- Resumo dos itens -->
-            </div>
+            <div id="cartSummaryList" style="margin-bottom: 15px; max-height: 150px; overflow-y: auto;"></div>
 
             <div class="form-group">
                 <label>Seu Nome Completo:</label>
@@ -455,7 +453,7 @@
 
             <div class="form-group" id="changeGroup" style="display: none;">
                 <label>Precisa de troco para quanto?</label>
-                <input type="text" id="clientChange" class="form-control" placeholder="Ex: Troco para R$ 50,00 (ou Não precisa)">
+                <input type="text" id="clientChange" class="form-control" placeholder="Ex: Troco para R$ 50,00">
             </div>
 
             <button class="btn-confirm-add" style="width: 100%; margin-top: 10px; background: var(--success);" onclick="sendOrderWhatsApp()">Enviar Pedido no WhatsApp</button>
@@ -473,122 +471,48 @@
 
     <script>
         const products = [
-            {
-                id: 1,
-                category: 'lanches',
-                name: 'Xis da Casa',
-                price: 32.00,
-                desc: 'Pão, bife, presunto, queijo, ovo, salada, milho, ervilha, tomate e alface.',
-                img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80',
-                removables: ['Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Tomate', 'Alface']
-            },
-            {
-                id: 2,
-                category: 'lanches',
-                name: 'Xis da Casa C/ Dog',
-                price: 35.00,
-                desc: 'Pão, bife, salsicha em cubos, presunto, queijo, ovo, milho, ervilha, tomate e alface.',
-                img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80',
-                removables: ['Salsicha', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Tomate', 'Alface']
-            },
-            {
-                id: 3,
-                category: 'lanches',
-                name: 'Xis Bacon',
-                price: 34.00,
-                desc: 'Pão, bife, bacon em cubos, queijo, presunto, ovo, milho, ervilha e salada.',
-                img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80',
-                removables: ['Bacon', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate']
-            },
-            {
-                id: 4,
-                category: 'lanches',
-                name: 'Xis Calabresa',
-                price: 33.00,
-                desc: 'Pão, bife, calabresa fatiada, queijo, presunto, ovo, milho, ervilha e salada.',
-                img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80',
-                removables: ['Calabresa', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate']
-            },
-            {
-                id: 5,
-                category: 'lanches',
-                name: 'Xis Strogonoff',
-                price: 36.00,
-                desc: 'Pão, strogonoff de carne ou frango, batata palha, queijo, presunto, milho e ervilha.',
-                img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80',
-                removables: ['Batata Palha', 'Presunto', 'Queijo', 'Milho', 'Ervilha']
-            },
-            {
-                id: 6,
-                category: 'lanches',
-                name: 'Xis Tudo',
-                price: 40.00,
-                desc: 'Pão, bife, frango, coração, calabresa, bacon, presunto, queijo, ovo, milho, ervilha e salada.',
-                img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80',
-                removables: ['Frango', 'Coração', 'Calabresa', 'Bacon', 'Ovo', 'Milho', 'Ervilha', 'Salada']
-            },
-            {
-                id: 7,
-                category: 'porcoes',
-                name: 'Tábua de Aperitivos',
-                price: 65.00,
-                desc: 'Alcatra, coração, frango à passarinho, frango empanado, polenta frita, batata frita, pepino e azeitona.',
-                img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=500&q=80',
-                removables: ['Pepino', 'Azeitona']
-            },
-            {
-                id: 8,
-                category: 'porcoes',
-                name: 'Iscas de Tilápia',
-                price: 48.00,
-                desc: 'Iscas de peixe tilápia empanadas e fritas, acompanhadas de limão e molho.',
-                img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=500&q=80',
-                removables: []
-            },
-            {
-                id: 9,
-                category: 'porcoes',
-                name: 'Batata Frita C/ Bacon e Muçarela',
-                price: 38.00,
-                desc: 'Porção de batatas fritas cobertas com muçarela derretida e bacon crocante.',
-                img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80',
-                removables: ['Bacon', 'Muçarela']
-            },
-            {
-                id: 10,
-                category: 'porcoes',
-                name: 'Torre de Batata (Strogonoff de Filé Mignon)',
-                price: 55.00,
-                desc: 'Torre recheada com camadas de batata frita e strogonoff de filé mignon cremoso.',
-                img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80',
-                removables: ['Batata Frita']
-            },
-            {
-                id: 11,
-                category: 'alacarte',
-                name: 'Alaminuta Filé Mignon',
-                price: 45.00,
-                desc: 'Grelhado ou à milanesa, acompanhado de arroz, batata frita, ovo e salada mista.',
-                img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
-                removables: ['Ovo', 'Salada Mista', 'Arroz', 'Batata Frita']
-            },
-            {
-                id: 12,
-                category: 'alacarte',
-                name: 'Alaminuta Picanha',
-                price: 48.00,
-                desc: 'Grelhado ou à milanesa, acompanhado de arroz, batata frita, ovo e salada mista.',
-                img: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=500&q=80',
-                removables: ['Ovo', 'Salada Mista', 'Arroz', 'Batata Frita']
-            },
-            {
-                id: 13,
-                category: 'alacarte',
-                name: 'Filé À Parmegiana',
-                price: 52.00,
-                desc: 'Filé mignon à milanesa com presunto, queijo e molho vermelho, arroz, batata frita e salada mista.',
-                img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80',
-                removables: ['Presunto', 'Queijo', 'Molho Vermelho', 'Arroz', 'Batata Frita', 'Salada Mista']
-            },
-            {
-         
+            { id: 1, category: 'lanches', name: 'Xis da Casa', price: 32.00, desc: 'Pão, bife, presunto, queijo, ovo, salada, milho, ervilha, tomate e alface.', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80', removables: ['Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Tomate', 'Alface'] },
+            { id: 2, category: 'lanches', name: 'Xis da Casa C/ Dog', price: 35.00, desc: 'Pão, bife, salsicha em cubos, presunto, queijo, ovo, milho, ervilha, tomate e alface.', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80', removables: ['Salsicha', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Tomate', 'Alface'] },
+            { id: 3, category: 'lanches', name: 'Xis Bacon', price: 34.00, desc: 'Pão, bife, bacon em cubos, queijo, presunto, ovo, milho, ervilha e salada.', img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80', removables: ['Bacon', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate'] },
+            { id: 4, category: 'lanches', name: 'Xis Calabresa', price: 33.00, desc: 'Pão, bife, calabresa fatiada, queijo, presunto, ovo, milho, ervilha e salada.', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80', removables: ['Calabresa', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate'] },
+            { id: 5, category: 'lanches', name: 'Xis Strogonoff', price: 36.00, desc: 'Pão, strogonoff de carne ou frango, batata palha, queijo, presunto, milho e ervilha.', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80', removables: ['Batata Palha', 'Presunto', 'Queijo', 'Milho', 'Ervilha'] },
+            { id: 6, category: 'lanches', name: 'Xis Tudo', price: 40.00, desc: 'Pão, bife, frango, coração, calabresa, bacon, presunto, queijo, ovo, milho, ervilha e salada.', img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80', removables: ['Frango', 'Coração', 'Calabresa', 'Bacon', 'Ovo', 'Milho', 'Ervilha', 'Salada'] },
+            { id: 7, category: 'porcoes', name: 'Tábua de Aperitivos', price: 65.00, desc: 'Alcatra, coração, frango à passarinho, frango empanado, polenta frita, batata frita, pepino e azeitona.', img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=500&q=80', removables: ['Pepino', 'Azeitona'] },
+            { id: 8, category: 'porcoes', name: 'Iscas de Tilápia', price: 48.00, desc: 'Iscas de peixe tilápia empanadas e fritas, acompanhadas de limão e molho.', img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=500&q=80', removables: [] },
+            { id: 9, category: 'porcoes', name: 'Batata Frita C/ Bacon e Muçarela', price: 38.00, desc: 'Porção de batatas fritas cobertas com muçarela derretida e bacon crocante.', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80', removables: ['Bacon', 'Muçarela'] },
+            { id: 10, category: 'porcoes', name: 'Torre de Batata (Strogonoff de Filé Mignon)', price: 55.00, desc: 'Torre recheada com camadas de batata frita e strogonoff de filé mignon cremoso.', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80', removables: ['Batata Frita'] },
+            { id: 11, category: 'alacarte', name: 'Alaminuta Filé Mignon', price: 45.00, desc: 'Grelhado ou à milanesa, acompanhado de arroz, batata frita, ovo e salada mista.', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80', removables: ['Ovo', 'Salada Mista', 'Arroz', 'Batata Frita'] },
+            { id: 12, category: 'alacarte', name: 'Alaminuta Picanha', price: 48.00, desc: 'Grelhado ou à milanesa, acompanhado de arroz, batata frita, ovo e salada mista.', img: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=500&q=80', removables: ['Ovo', 'Salada Mista', 'Arroz', 'Batata Frita'] },
+            { id: 13, category: 'alacarte', name: 'Filé À Parmegiana', price: 52.00, desc: 'Filé mignon à milanesa com presunto, queijo e molho vermelho, arroz, batata frita e salada mista.', img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80', removables: ['Presunto', 'Queijo', 'Molho Vermelho', 'Arroz', 'Batata Frita', 'Salada Mista'] },
+            { id: 14, category: 'alacarte', name: 'Colonial', price: 58.00, desc: 'Filé mignon, picanha, peito de frango, coração, arroz, polenta frita, omelete com salame, alface com bacon e salada mista.', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80', removables: ['Salame', 'Omelete', 'Alface com Bacon', 'Salada Mista', 'Polenta Frita'] }
+        ];
+
+        let cart = [];
+        let currentProduct = null;
+        let currentQty = 1;
+
+        function renderProducts(filter = 'todos') {
+            const container = document.getElementById('productContainer');
+            container.innerHTML = '';
+            const filtered = filter === 'todos' ? products : products.filter(p => p.category === filter);
+
+            filtered.forEach(product => {
+                container.innerHTML += `
+                    <div class="product-card" onclick="openProductModal(${product.id})">
+                        <img class="product-img" src="${product.img}" alt="${product.name}">
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">${product.name}</div>
+                                <div class="product-desc">${product.desc}</div>
+                            </div>
+                            <div class="product-footer">
+                                <span class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                                <button class="btn-add-mini">Pedir</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterCategory(category, 

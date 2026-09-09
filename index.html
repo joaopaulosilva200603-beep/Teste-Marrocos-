@@ -6,14 +6,14 @@
     <title>Marrocos Lanches - Delivery</title>
     <style>
         :root {
-            --primary: #4A2E1B;       /* Marrom principal */
-            --primary-dark: #2C1810;  /* Marrom escuro */
-            --accent: #C28E54;        /* Tom dourado/bronze de destaque */
-            --bg: #F5F0EA;            /* Fundo creme claro rústico */
-            --text: #2B2B2B;          /* Texto escuro */
-            --gray: #7D7D7D;          /* Cinza secundário */
-            --light-gray: #E6DFD5;    /* Fundo de elementos */
-            --success: #388E3C;       /* Verde WhatsApp */
+            --primary: #4A2E1B;       
+            --primary-dark: #2C1810;  
+            --accent: #C28E54;        
+            --bg: #F5F0EA;            
+            --text: #2B2B2B;          
+            --gray: #7D7D7D;          
+            --light-gray: #E6DFD5;    
+            --success: #388E3C;       
         }
 
         * {
@@ -143,10 +143,6 @@
             font-size: 0.82rem;
             color: var(--gray);
             margin-bottom: 10px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .product-footer {
@@ -170,11 +166,6 @@
             border-radius: 6px;
             font-size: 0.85rem;
             font-weight: bold;
-            transition: background 0.2s;
-        }
-
-        .btn-add-mini:hover {
-            background: var(--primary-dark);
         }
 
         /* Modal de Personalização */
@@ -203,12 +194,6 @@
             border-radius: 20px 20px 0 0;
             padding: 20px;
             overflow-y: auto;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
         }
 
         .modal-header {
@@ -310,11 +295,6 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-confirm-add:hover {
-            background: var(--primary-dark);
         }
 
         /* Barra Inferior do Carrinho */
@@ -358,7 +338,6 @@
             font-weight: bold;
             font-size: 0.95rem;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(56, 142, 60, 0.3);
         }
     </style>
 </head>
@@ -395,9 +374,7 @@
             <div id="customizationSection">
                 <div class="customization-group">
                     <div class="customization-title">O que deseja retirar do lanche?</div>
-                    <div id="removableItemsList">
-                        <!-- Itens removíveis injetados aqui -->
-                    </div>
+                    <div id="removableItemsList"></div>
                 </div>
             </div>
 
@@ -422,7 +399,6 @@
     </div>
 
     <script>
-        // Base de Produtos inspirada no cardápio da Marrocos Lanches
         const products = [
             {
                 id: 1,
@@ -604,4 +580,24 @@
             let total = 0;
 
             cart.forEach((item) => {
-                let subtot
+                let subtotal = item.price * item.qty;
+                total += subtotal;
+                message += `• *${item.qty}x ${item.name}* - R$ ${subtotal.toFixed(2).replace('.', ',')}%0A`;
+                
+                if (item.removals && item.removals.length > 0) {
+                    message += `   _Obs: ${item.removals.join(', ')}_%0A`;
+                }
+            });
+
+            message += `%0A*Total dos Produtos: R$ ${total.toFixed(2).replace('.', ',')}*`;
+            message += `%0A%0A*Endereço de Entrega:* [Digite seu endereço aqui]`;
+
+            const phone = "5554999999999"; 
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+        }
+
+        // Executar carregamento inicial
+        renderProducts();
+    </script>
+</body>
+</html>

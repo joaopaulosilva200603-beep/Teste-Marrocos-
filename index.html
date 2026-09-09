@@ -168,7 +168,7 @@
             font-weight: bold;
         }
 
-        /* Modal de Personalização */
+        /* Modais */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -297,6 +297,40 @@
             cursor: pointer;
         }
 
+        /* Formulário de Checkout */
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        .cart-summary-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--light-gray);
+        }
+
         /* Barra Inferior do Carrinho */
         .cart-bar {
             position: fixed;
@@ -356,17 +390,15 @@
     </div>
 
     <div class="container">
-        <div id="productContainer" class="product-grid">
-            <!-- Produtos inseridos via JS -->
-        </div>
+        <div id="productContainer" class="product-grid"></div>
     </div>
 
-    <!-- Modal de Personalização -->
+    <!-- Modal de Personalização do Produto -->
     <div class="modal-overlay" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modalProductName">Nome do Produto</h3>
-                <button class="modal-close" onclick="closeModal()">✕</button>
+                <button class="modal-close" onclick="closeModal('productModal')">✕</button>
             </div>
             <img id="modalProductImg" class="modal-img" src="" alt="Produto">
             <p id="modalProductDesc" style="color: var(--gray); font-size: 0.9rem; margin-bottom: 15px;"></p>
@@ -389,13 +421,54 @@
         </div>
     </div>
 
+    <!-- Modal de Finalização do Pedido (Checkout) -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Finalizar Pedido</h3>
+                <button class="modal-close" onclick="closeModal('checkoutModal')">✕</button>
+            </div>
+
+            <div id="cartSummaryList" style="margin-bottom: 15px; max-height: 150px; overflow-y: auto;">
+                <!-- Resumo dos itens -->
+            </div>
+
+            <div class="form-group">
+                <label>Seu Nome Completo:</label>
+                <input type="text" id="clientName" class="form-control" placeholder="Ex: João da Silva">
+            </div>
+
+            <div class="form-group">
+                <label>Endereço de Entrega Completo (Rua, Número, Bairro):</label>
+                <textarea id="clientAddress" class="form-control" rows="2" placeholder="Ex: Rua das Flores, 123 - Centro"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Forma de Pagamento:</label>
+                <select id="paymentMethod" class="form-control" onchange="checkPaymentMethod()">
+                    <option value="Pix">Pix</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Cartão de Débito">Cartão de Débito</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="changeGroup" style="display: none;">
+                <label>Precisa de troco para quanto?</label>
+                <input type="text" id="clientChange" class="form-control" placeholder="Ex: Troco para R$ 50,00 (ou Não precisa)">
+            </div>
+
+            <button class="btn-confirm-add" style="width: 100%; margin-top: 10px; background: var(--success);" onclick="sendOrderWhatsApp()">Enviar Pedido no WhatsApp</button>
+        </div>
+    </div>
+
     <!-- Barra do Carrinho -->
     <div class="cart-bar" id="cartBar">
         <div class="cart-info">
             <span id="cartItemCount">0 itens no carrinho</span>
             <strong id="cartTotalPrice">R$ 0,00</strong>
         </div>
-        <button class="btn-checkout" onclick="openCheckout()">Ver Carrinho / Pedir</button>
+        <button class="btn-checkout" onclick="openCheckoutModal()">Ver Carrinho / Pedir</button>
     </div>
 
     <script>
@@ -412,192 +485,110 @@
             {
                 id: 2,
                 category: 'lanches',
-                name: 'Xis Bacon',
-                price: 34.00,
-                desc: 'Pão, bife, bacon em cubos, queijo, presunto, ovo, milho, ervilha e salada.',
+                name: 'Xis da Casa C/ Dog',
+                price: 35.00,
+                desc: 'Pão, bife, salsicha em cubos, presunto, queijo, ovo, milho, ervilha, tomate e alface.',
                 img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80',
-                removables: ['Bacon', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate']
+                removables: ['Salsicha', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Tomate', 'Alface']
             },
             {
                 id: 3,
                 category: 'lanches',
-                name: 'Xis Strogonoff',
-                price: 36.00,
-                desc: 'Pão, strogonoff de carne ou frango, batata palha, queijo, presunto, milho e ervilha.',
+                name: 'Xis Bacon',
+                price: 34.00,
+                desc: 'Pão, bife, bacon em cubos, queijo, presunto, ovo, milho, ervilha e salada.',
                 img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80',
-                removables: ['Batata Palha', 'Presunto', 'Queijo', 'Milho', 'Ervilha']
+                removables: ['Bacon', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate']
             },
             {
                 id: 4,
-                category: 'porcoes',
-                name: 'Batata Frita C/ Bacon e Muçarela',
-                price: 38.00,
-                desc: 'Porção generosa de batatas fritas cobertas com muçarela derretida e bacon crocante.',
-                img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80',
-                removables: ['Bacon', 'Muçarela']
+                category: 'lanches',
+                name: 'Xis Calabresa',
+                price: 33.00,
+                desc: 'Pão, bife, calabresa fatiada, queijo, presunto, ovo, milho, ervilha e salada.',
+                img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80',
+                removables: ['Calabresa', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate']
             },
             {
                 id: 5,
+                category: 'lanches',
+                name: 'Xis Strogonoff',
+                price: 36.00,
+                desc: 'Pão, strogonoff de carne ou frango, batata palha, queijo, presunto, milho e ervilha.',
+                img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80',
+                removables: ['Batata Palha', 'Presunto', 'Queijo', 'Milho', 'Ervilha']
+            },
+            {
+                id: 6,
+                category: 'lanches',
+                name: 'Xis Tudo',
+                price: 40.00,
+                desc: 'Pão, bife, frango, coração, calabresa, bacon, presunto, queijo, ovo, milho, ervilha e salada.',
+                img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80',
+                removables: ['Frango', 'Coração', 'Calabresa', 'Bacon', 'Ovo', 'Milho', 'Ervilha', 'Salada']
+            },
+            {
+                id: 7,
                 category: 'porcoes',
                 name: 'Tábua de Aperitivos',
                 price: 65.00,
-                desc: 'Alcatra, coração, frango a passarinho, polenta frita, batata frita, pepino e azeitona.',
+                desc: 'Alcatra, coração, frango à passarinho, frango empanado, polenta frita, batata frita, pepino e azeitona.',
                 img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=500&q=80',
                 removables: ['Pepino', 'Azeitona']
             },
             {
-                id: 6,
+                id: 8,
+                category: 'porcoes',
+                name: 'Iscas de Tilápia',
+                price: 48.00,
+                desc: 'Iscas de peixe tilápia empanadas e fritas, acompanhadas de limão e molho.',
+                img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=500&q=80',
+                removables: []
+            },
+            {
+                id: 9,
+                category: 'porcoes',
+                name: 'Batata Frita C/ Bacon e Muçarela',
+                price: 38.00,
+                desc: 'Porção de batatas fritas cobertas com muçarela derretida e bacon crocante.',
+                img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80',
+                removables: ['Bacon', 'Muçarela']
+            },
+            {
+                id: 10,
+                category: 'porcoes',
+                name: 'Torre de Batata (Strogonoff de Filé Mignon)',
+                price: 55.00,
+                desc: 'Torre recheada com camadas de batata frita e strogonoff de filé mignon cremoso.',
+                img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80',
+                removables: ['Batata Frita']
+            },
+            {
+                id: 11,
                 category: 'alacarte',
                 name: 'Alaminuta Filé Mignon',
-                price: 42.00,
+                price: 45.00,
                 desc: 'Grelhado ou à milanesa, acompanhado de arroz, batata frita, ovo e salada mista.',
                 img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
                 removables: ['Ovo', 'Salada Mista', 'Arroz', 'Batata Frita']
-            }
-        ];
-
-        let cart = [];
-        let currentProduct = null;
-        let currentQty = 1;
-
-        function renderProducts(filter = 'todos') {
-            const container = document.getElementById('productContainer');
-            container.innerHTML = '';
-
-            const filtered = filter === 'todos' ? products : products.filter(p => p.category === filter);
-
-            filtered.forEach(product => {
-                container.innerHTML += `
-                    <div class="product-card" onclick="openProductModal(${product.id})">
-                        <img class="product-img" src="${product.img}" alt="${product.name}">
-                        <div class="product-info">
-                            <div>
-                                <div class="product-title">${product.name}</div>
-                                <div class="product-desc">${product.desc}</div>
-                            </div>
-                            <div class="product-footer">
-                                <span class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
-                                <button class="btn-add-mini">Pedir</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function filterCategory(category, btn) {
-            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderProducts(category);
-        }
-
-        function openProductModal(id) {
-            currentProduct = products.find(p => p.id === id);
-            currentQty = 1;
-
-            document.getElementById('modalProductName').innerText = currentProduct.name;
-            document.getElementById('modalProductImg').src = currentProduct.img;
-            document.getElementById('modalProductDesc').innerText = currentProduct.desc;
-            document.getElementById('modalQty').innerText = currentQty;
-
-            const removableContainer = document.getElementById('removableItemsList');
-            const section = document.getElementById('customizationSection');
-            removableContainer.innerHTML = '';
-
-            if (currentProduct.removables && currentProduct.removables.length > 0) {
-                section.style.display = 'block';
-                currentProduct.removables.forEach((item, index) => {
-                    removableContainer.innerHTML += `
-                        <label class="checkbox-label">
-                            <input type="checkbox" value="${item}" id="removable_${index}">
-                            Sem ${item}
-                        </label>
-                    `;
-                });
-            } else {
-                section.style.display = 'none';
-            }
-
-            updateModalTotal();
-            document.getElementById('productModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('productModal').classList.remove('active');
-        }
-
-        function changeModalQty(change) {
-            if (currentQty + change >= 1) {
-                currentQty += change;
-                document.getElementById('modalQty').innerText = currentQty;
-                updateModalTotal();
-            }
-        }
-
-        function updateModalTotal() {
-            const total = currentProduct.price * currentQty;
-            document.getElementById('modalTotalPrice').innerText = total.toFixed(2).replace('.', ',');
-        }
-
-        function confirmAddToCart() {
-            let removedItems = [];
-            if (currentProduct.removables) {
-                currentProduct.removables.forEach((item, index) => {
-                    const checkbox = document.getElementById(`removable_${index}`);
-                    if (checkbox && checkbox.checked) {
-                        removedItems.push(`Sem ${item}`);
-                    }
-                });
-            }
-
-            cart.push({
-                name: currentProduct.name,
-                price: currentProduct.price,
-                qty: currentQty,
-                removals: removedItems
-            });
-
-            closeModal();
-            updateCartBar();
-        }
-
-        function updateCartBar() {
-            const cartBar = document.getElementById('cartBar');
-            if (cart.length > 0) {
-                cartBar.classList.add('active');
-                const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-                const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-                document.getElementById('cartItemCount').innerText = `${totalItems} ${totalItems === 1 ? 'item' : 'itens'} no carrinho`;
-                document.getElementById('cartTotalPrice').innerText = `R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
-            } else {
-                cartBar.classList.remove('active');
-            }
-        }
-
-        function openCheckout() {
-            let message = "🍔 *Novo Pedido - Marrocos Lanches*%0A%0A";
-            let total = 0;
-
-            cart.forEach((item) => {
-                let subtotal = item.price * item.qty;
-                total += subtotal;
-                message += `• *${item.qty}x ${item.name}* - R$ ${subtotal.toFixed(2).replace('.', ',')}%0A`;
-                
-                if (item.removals && item.removals.length > 0) {
-                    message += `   _Obs: ${item.removals.join(', ')}_%0A`;
-                }
-            });
-
-            message += `%0A*Total dos Produtos: R$ ${total.toFixed(2).replace('.', ',')}*`;
-            message += `%0A%0A*Endereço de Entrega:* [Digite seu endereço aqui]`;
-
-            const phone = "5554999999999"; 
-            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-        }
-
-        // Executar carregamento inicial
-        renderProducts();
-    </script>
-</body>
-</html>
+            },
+            {
+                id: 12,
+                category: 'alacarte',
+                name: 'Alaminuta Picanha',
+                price: 48.00,
+                desc: 'Grelhado ou à milanesa, acompanhado de arroz, batata frita, ovo e salada mista.',
+                img: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=500&q=80',
+                removables: ['Ovo', 'Salada Mista', 'Arroz', 'Batata Frita']
+            },
+            {
+                id: 13,
+                category: 'alacarte',
+                name: 'Filé À Parmegiana',
+                price: 52.00,
+                desc: 'Filé mignon à milanesa com presunto, queijo e molho vermelho, arroz, batata frita e salada mista.',
+                img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?auto=format&fit=crop&w=500&q=80',
+                removables: ['Presunto', 'Queijo', 'Molho Vermelho', 'Arroz', 'Batata Frita', 'Salada Mista']
+            },
+            {
+         

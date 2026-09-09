@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery - Cardápio Digital</title>
+    <title>Marrocos Lanches - Delivery</title>
     <style>
         :root {
-            --primary: #e63946;
-            --primary-dark: #c1121f;
-            --bg: #f8f9fa;
-            --text: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --success: #2a9d8f;
+            --primary: #4A2E1B;       /* Marrom principal */
+            --primary-dark: #2C1810;  /* Marrom escuro */
+            --accent: #C28E54;        /* Tom dourado/bronze de destaque */
+            --bg: #F5F0EA;            /* Fundo creme claro rústico */
+            --text: #2B2B2B;          /* Texto escuro */
+            --gray: #7D7D7D;          /* Cinza secundário */
+            --light-gray: #E6DFD5;    /* Fundo de elementos */
+            --success: #388E3C;       /* Verde WhatsApp */
         }
 
         * {
@@ -29,21 +30,26 @@
         }
 
         header {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: white;
-            padding: 20px;
+            padding: 25px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-bottom: 3px solid var(--accent);
         }
 
         header h1 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-bottom: 5px;
+            letter-spacing: 1px;
+            color: #FFF3E4;
         }
 
         header p {
             font-size: 0.9rem;
             opacity: 0.9;
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .categories {
@@ -51,7 +57,7 @@
             gap: 10px;
             padding: 15px;
             overflow-x: auto;
-            background: white;
+            background: #FFF;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
@@ -61,11 +67,11 @@
         .category-btn {
             background: var(--light-gray);
             border: none;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 20px;
             font-size: 0.9rem;
             font-weight: 600;
-            color: var(--gray);
+            color: var(--primary);
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.3s;
@@ -80,14 +86,6 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 15px;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            margin: 20px 0 10px 0;
-            color: var(--text);
-            border-left: 4px solid var(--primary);
-            padding-left: 8px;
         }
 
         .product-grid {
@@ -106,26 +104,28 @@
             background: white;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 3px 8px rgba(74, 46, 27, 0.08);
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(194, 142, 84, 0.2);
         }
 
         .product-card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(74, 46, 27, 0.15);
         }
 
         .product-img {
             width: 100%;
-            height: 140px;
+            height: 150px;
             object-fit: cover;
             background-color: var(--light-gray);
         }
 
         .product-info {
-            padding: 12px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -133,15 +133,16 @@
         }
 
         .product-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: bold;
             margin-bottom: 4px;
+            color: var(--primary-dark);
         }
 
         .product-desc {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             color: var(--gray);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -152,33 +153,38 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 8px;
+            margin-top: 5px;
         }
 
         .product-price {
             font-weight: bold;
-            color: var(--primary-dark);
-            font-size: 1rem;
+            color: var(--primary);
+            font-size: 1.05rem;
         }
 
         .btn-add-mini {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 6px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: bold;
+            transition: background 0.2s;
         }
 
-        /* Modal de Personalização (Estilo Mc Donald's) */
+        .btn-add-mini:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Modal de Personalização */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(44, 24, 16, 0.7);
             display: none;
             justify-content: center;
             align-items: flex-end;
@@ -212,6 +218,10 @@
             margin-bottom: 15px;
         }
 
+        .modal-header h3 {
+            color: var(--primary-dark);
+        }
+
         .modal-close {
             background: var(--light-gray);
             border: none;
@@ -220,6 +230,7 @@
             border-radius: 50%;
             font-weight: bold;
             cursor: pointer;
+            color: var(--primary-dark);
         }
 
         .modal-img {
@@ -238,7 +249,9 @@
             font-weight: bold;
             font-size: 0.95rem;
             margin-bottom: 8px;
-            color: var(--text);
+            color: var(--primary-dark);
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 4px;
         }
 
         .checkbox-label {
@@ -247,7 +260,7 @@
             gap: 10px;
             padding: 8px 0;
             font-size: 0.9rem;
-            border-bottom: 1px solid var(--light-gray);
+            border-bottom: 1px solid #f2f2f2;
             cursor: pointer;
         }
 
@@ -278,11 +291,13 @@
             padding: 10px 15px;
             font-weight: bold;
             cursor: pointer;
+            color: var(--primary-dark);
         }
 
         .quantity-control span {
             padding: 0 15px;
             font-weight: bold;
+            color: var(--primary-dark);
         }
 
         .btn-confirm-add {
@@ -295,6 +310,11 @@
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-confirm-add:hover {
+            background: var(--primary-dark);
         }
 
         /* Barra Inferior do Carrinho */
@@ -304,13 +324,14 @@
             left: 0;
             width: 100%;
             background: white;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 -4px 15px rgba(74, 46, 27, 0.15);
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 50;
             display: none;
+            border-top: 2px solid var(--accent);
         }
 
         .cart-bar.active {
@@ -325,42 +346,43 @@
 
         .cart-info strong {
             font-size: 1.1rem;
-            color: var(--text);
+            color: var(--primary-dark);
         }
 
         .btn-checkout {
             background: var(--success);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 22px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 0.95rem;
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(56, 142, 60, 0.3);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🍔 Delivery Express</h1>
-        <p>Escolha seus pratos e monte do seu jeito!</p>
+        <h1>🍔 Marrocos Lanches</h1>
+        <p>Hambúrgueria & Porções • Peça Direto pelo WhatsApp</p>
     </header>
 
     <div class="categories" id="categoriesContainer">
         <button class="category-btn active" onclick="filterCategory('todos', this)">Todos</button>
-        <button class="category-btn" onclick="filterCategory('xis', this)">Xis & Lanches</button>
+        <button class="category-btn" onclick="filterCategory('lanches', this)">Xis & Lanches</button>
         <button class="category-btn" onclick="filterCategory('porcoes', this)">Porções</button>
-        <button class="category-btn" onclick="filterCategory('bebidas', this)">Bebidas</button>
+        <button class="category-btn" onclick="filterCategory('alacarte', this)">À La Carte</button>
     </div>
 
     <div class="container">
         <div id="productContainer" class="product-grid">
-            <!-- Os produtos entram aqui via JavaScript -->
+            <!-- Produtos inseridos via JS -->
         </div>
     </div>
 
-    <!-- Modal de Customização -->
+    <!-- Modal de Personalização -->
     <div class="modal-overlay" id="productModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -372,7 +394,7 @@
 
             <div id="customizationSection">
                 <div class="customization-group">
-                    <div class="customization-title">O que deseja retirar? (Sem custo)</div>
+                    <div class="customization-title">O que deseja retirar do lanche?</div>
                     <div id="removableItemsList">
                         <!-- Itens removíveis injetados aqui -->
                     </div>
@@ -400,43 +422,61 @@
     </div>
 
     <script>
-        // Banco de Dados de Produtos com Fotos e Ingredientes Removíveis
+        // Base de Produtos inspirada no cardápio da Marrocos Lanches
         const products = [
             {
                 id: 1,
-                category: 'xis',
-                name: 'Xis Bacon Especial',
+                category: 'lanches',
+                name: 'Xis da Casa',
                 price: 32.00,
-                desc: 'Pão, bife de carne artesanal, queijo cheddar cremoso, bacon crocante, alface e tomate.',
+                desc: 'Pão, bife, presunto, queijo, ovo, salada, milho, ervilha, tomate e alface.',
                 img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80',
-                removables: ['Alface', 'Tomate', 'Maionese da casa']
+                removables: ['Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Tomate', 'Alface']
             },
             {
                 id: 2,
-                category: 'xis',
-                name: 'Xis Salada Completo',
-                price: 28.00,
-                desc: 'Pão macio, bife, queijo prato derretido, presunto, ovo, milho, ervilha, alface e tomate.',
+                category: 'lanches',
+                name: 'Xis Bacon',
+                price: 34.00,
+                desc: 'Pão, bife, bacon em cubos, queijo, presunto, ovo, milho, ervilha e salada.',
                 img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=500&q=80',
-                removables: ['Milho', 'Ervilha', 'Alface', 'Tomate', 'Ovo']
+                removables: ['Bacon', 'Presunto', 'Queijo', 'Ovo', 'Milho', 'Ervilha', 'Alface', 'Tomate']
             },
             {
                 id: 3,
-                category: 'porcoes',
-                name: 'Porção de Fritas com Bacon e Cheddar',
-                price: 35.00,
-                desc: 'Batatas fritas sequinhas cobertas com muito cheddar cremoso e cubos de bacon.',
-                img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80',
-                removables: []
+                category: 'lanches',
+                name: 'Xis Strogonoff',
+                price: 36.00,
+                desc: 'Pão, strogonoff de carne ou frango, batata palha, queijo, presunto, milho e ervilha.',
+                img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80',
+                removables: ['Batata Palha', 'Presunto', 'Queijo', 'Milho', 'Ervilha']
             },
             {
                 id: 4,
-                category: 'bebidas',
-                name: 'Coca-Cola 2 Litros',
-                price: 12.00,
-                desc: 'Garrafa 2L gelada.',
-                img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=500&q=80',
-                removables: []
+                category: 'porcoes',
+                name: 'Batata Frita C/ Bacon e Muçarela',
+                price: 38.00,
+                desc: 'Porção generosa de batatas fritas cobertas com muçarela derretida e bacon crocante.',
+                img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=500&q=80',
+                removables: ['Bacon', 'Muçarela']
+            },
+            {
+                id: 5,
+                category: 'porcoes',
+                name: 'Tábua de Aperitivos',
+                price: 65.00,
+                desc: 'Alcatra, coração, frango a passarinho, polenta frita, batata frita, pepino e azeitona.',
+                img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=500&q=80',
+                removables: ['Pepino', 'Azeitona']
+            },
+            {
+                id: 6,
+                category: 'alacarte',
+                name: 'Alaminuta Filé Mignon',
+                price: 42.00,
+                desc: 'Grelhado ou à milanesa, acompanhado de arroz, batata frita, ovo e salada mista.',
+                img: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
+                removables: ['Ovo', 'Salada Mista', 'Arroz', 'Batata Frita']
             }
         ];
 
@@ -484,7 +524,6 @@
             document.getElementById('modalProductDesc').innerText = currentProduct.desc;
             document.getElementById('modalQty').innerText = currentQty;
 
-            // Renderizar itens removíveis (estilo McDonald's)
             const removableContainer = document.getElementById('removableItemsList');
             const section = document.getElementById('customizationSection');
             removableContainer.innerHTML = '';
@@ -525,7 +564,6 @@
         }
 
         function confirmAddToCart() {
-            // Capturar o que o cliente marcou para tirar
             let removedItems = [];
             if (currentProduct.removables) {
                 currentProduct.removables.forEach((item, index) => {
@@ -562,29 +600,8 @@
         }
 
         function openCheckout() {
-            let message = "Olá! Gostaria de fazer o seguinte pedido:%0A%0A";
+            let message = "🍔 *Novo Pedido - Marrocos Lanches*%0A%0A";
             let total = 0;
 
-            cart.forEach((item, index) => {
-                let subtotal = item.price * item.qty;
-                total += subtotal;
-                message += `*${item.qty}x ${item.name}* - R$ ${subtotal.toFixed(2).replace('.', ',')}%0A`;
-                
-                if (item.removals && item.removals.length > 0) {
-                    message += `   _Obs: ${item.removals.join(', ')}_%0A`;
-                }
-            });
-
-            message += `%0A*Total dos Produtos: R$ ${total.toFixed(2).replace('.', ',')}*`;
-            message += `%0A%0A*Endereço de Entrega:* [Digite seu endereço aqui]`;
-
-            // Substitua pelo seu número de WhatsApp
-            const phone = "5554999999999"; 
-            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-        }
-
-        // Inicializar a página
-        renderProducts();
-    </script>
-</body>
-</html>
+            cart.forEach((item) => {
+                let subtot
